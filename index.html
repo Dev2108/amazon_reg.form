@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css">
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+  </head>
+<body >
+  <h1 class="text-white text-center font-weight-bold bg-success" style="font-size: 55px;"> Registration Form</h1>
+    <div class="container"><br>
+		
+		<div class="col-lg-6 m-auto d-block">
+      <div class=""style="margin-top: 5%;">
+        <h3 class="">Amazon Alert <small>It's free!</small></h3>
+       </div>
+       <div class="" style="margin-top: 5%;" >
+        <form action="http://localhost:5000/register" method="post" onsubmit="return validate()">
+          <div class="form-group inputbox" style="width: 100%;">
+          <br>
+          <select name="products" class="width"  style="width: 100%;" id="pid" onchange="fillprice()">
+            <option  value="">Choose Product</option>
+          </select>
+          <span id="alert-pid" class=""> </span>
+          <!-- <button type="button"  onclick="populate()" name="refesh">refresh</button> -->
+          </div>
+        <br>
+          <div class="price_details flex " style="display: flex;">
+
+            <div class="">
+              <p id="latest_price" class="form-control input-sm">Latest Price</p>
+              <span id="alert-email" class=""> </span>
+            </div>
+            <div class="" style="padding-left:1%; padding-right: 1%;">
+              <p  id="highest_price" class="form-control input-sm">Highest Price</p>
+              <span id="alert-email" class=""> </span>
+            </div>
+            <div class="">
+              <p id="lowest_price" class="form-control input-sm" >Lowest Price </p>
+              <span id="alert-email" class=""> </span>
+            </div>
+          </div>
+          <div class="form-group inputbox">
+            <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address *">
+            <span id="alert-email" class=""> </span>
+          </div>
+
+
+        </div>
+        <br>
+        <div class="form-group inputbox">
+          <input type="number" name="threshold" id="threshold" class="form-control input-sm" placeholder="Threshold *">
+          <span id="alert-threshold" class=""> </span>
+        </div>
+        <br>
+        <input type="reset" name="submit" value="Reset" class="btn btn-success" onclick="reset_errors()">
+        <input type="submit" name="submit" value="Register" class="btn btn-success">
+      </form>
+    </div>
+<br>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   
+
+<script type="text/javascript">
+		
+    var API_BASE_URL='http://127.0.0.1:5000/';
+
+function validate()
+{
+  var email = document.getElementById('email').value;
+  var product_id=document.getElementById('pid').value;
+  var threshold = document.getElementById('threshold').value;
+  console.log(product_id);
+  var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  if(email == ""){
+      document.getElementById('alert-email').innerHTML =" The email field can't be empty";
+      document.getElementById('alert-email').style.color="red";
+      return false;
+    }
+    if (email.match(mailformat)) {
+        document.getElementById('alert-email').style.color="green";
+        document.getElementById('alert-email').innerHTML ="Valid Email";
+      }
+      else
+      {
+        document.getElementById('alert-email').innerHTML =" Please enter a valid email";
+        document.getElementById('alert-email').style.color="red";
+        return false;
+      }
+      if(product_id == ""){
+          document.getElementById('alert-pid').innerHTML =" The product_id can't be empty";
+          document.getElementById('alert-pid').style.color="red";
+
+          return false;
+        }
+      else{
+        document.getElementById('alert-pid').innerHTML =" Valid entry";
+        document.getElementById('alert-pid').style.color="green";
+      }
+        if(threshold == ""){
+            document.getElementById('alert-threshold').innerHTML =" The threshold can't be empty";
+            document.getElementById('alert-threshold').style.color="red";
+            return false;
+          }
+        else{
+          document.getElementById('alert-threshold').innerHTML =" Valid entry";
+          document.getElementById('alert-threshold').style.color="green";
+        }
+}
+function reset_errors(){
+  document.getElementById('alert-threshold').innerHTML="";
+  document.getElementById('alert-email').innerHTML="";
+  var dropdown = $('#pid');
+  dropdown.prop('selectedIndex', 0);
+  document.getElementById('alert-pid').innerHTML ="";
+}
+function populate(){
+  var dropdown = $('#pid');
+  dropdown.empty();
+dropdown.append('<option selected=true disabled>Choose Product</option>');
+dropdown.prop('selectedIndex', 0);
+var url = API_BASE_URL+'prod_details';
+
+var request = new XMLHttpRequest();
+request.open('GET', url, true);
+request.onload = function() {
+  if (request.status === 200) {
+    var data = JSON.parse(request.responseText);
+    $.each(data, function (key, entry) {
+      dropdown.append($('<option></option>').attr('value', entry[0]).text(entry[1]));
+    });
+  }
+  else {
+    console.log('Reached the server, but it returned an error');
+  }
+};
+request.onerror = function() {
+  console.error('An error occurred fetching the JSON from ' + url);
+};
+request.send();
+}
+function fillprice(){
+  var pid=document.getElementById('pid').value;
+  var url = API_BASE_URL+'price_details/'+pid;
+  console.log(url);
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.onload = function() {
+    if (request.status === 200) {
+      var data = JSON.parse(request.responseText);
+      console.log(data);
+      document.getElementById('latest_price').innerHTML ="Latest Price is "+data[0][0];
+      document.getElementById('highest_price').innerHTML ="Highest Price is "+data[0][1];
+      document.getElementById('lowest_price').innerHTML ="Lowest Price is "+data[0][2];
+    }
+    else {
+      console.log('Reached the server, but it returned an error');
+    }
+};
+request.onerror = function() {
+  console.error('An error occurred fetching the JSON from ' + url);
+};
+request.send();
+}
+</script>
+
+</body>
+</html>
+

@@ -148,7 +148,7 @@ function populate(){
   dropdown.empty();
 dropdown.append('<option selected=true disabled>Choose Product</option>');
 dropdown.prop('selectedIndex', 0);
-var url = `${API_BASE_URL}prod_details`;
+var url = 'http://127.0.0.1:5000/'+'prod_details';
 
 var request = new XMLHttpRequest();
 request.open('GET', url, true);
@@ -171,7 +171,7 @@ request.send();
 function fillprice(){
   var pid=document.getElementById('pid').value;
   var interval = document.getElementById('interval').value;
-  var url = `${API_BASE_URL}price_details/${pid}/${interval}`;
+  var url = 'http://127.0.0.1:5000/'+'price_details/'+'${pid}/'+'${interval}';
   console.log(url);
   var request = new XMLHttpRequest();
   request.open('GET', url, true);
@@ -215,7 +215,7 @@ function renderChart(){
   var ctx = document.getElementById('myChart').getContext('2d');
   var pid=document.getElementById('pid').value;
   var interval = document.getElementById('interval').value;
-  var url = `${API_BASE_URL}plot_price/${pid}/${interval}`;
+  var url = 'http://127.0.0.1:5000/'+'plot_price/'+'${pid}/'+'${interval}';
   console.log(url);
   var request = new XMLHttpRequest();
   request.open('GET', url, true);

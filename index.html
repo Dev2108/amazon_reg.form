@@ -20,7 +20,7 @@
 	      <hr>
        </div>
        <div class="" style="margin-top: 5%;" >
-        <form action="http://localhost:5000/register" method="post" onsubmit="return validate()">
+        <form action="http://localhost:5000/register" method="post" onsubmit="">
           <div class="form-group inputbox" style="width: 100%;">
           <br>
           <select name="products" class="width"  style="width: 100%;" id="pid" onchange="fillprice()">
@@ -75,13 +75,6 @@
             <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address *">
             <span id="alert-email" class=""> </span>
           </div>
-          <br>
-          <div class="form-group inputbox">
-            <input type=" text number" name="mob" id="mob" min="1000000000" max="9999999999" class="form-control input-sm" placeholder="Mobile Number *">
-            <span id="alert-mob" class=""> </span>
-          </div>
-
-
        
         <br>
         <div class="form-group inputbox">
@@ -127,14 +120,7 @@ function validate()
         return false;
       }
     }
-      
-    if (mobile_checkbox == 0){
-      if(mob == ""){
-        document.getElementById('alert-mob').innerHTML =" The mobile number field can't be empty";
-      document.getElementById('alert-mob').style.color="red";
-      return false;
-      }
-    }
+   
 	
       if(product_id == ""){
           document.getElementById('alert-pid').innerHTML =" The product_id can't be empty";

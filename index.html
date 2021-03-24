@@ -75,9 +75,14 @@
             <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address *">
             <span id="alert-email" class=""> </span>
           </div>
+          <br>
+          <div class="form-group inputbox">
+            <input type=" text number" name="mob" id="mob" min="1000000000" max="9999999999" class="form-control input-sm" placeholder="Mobile Number *">
+            <span id="alert-mob" class=""> </span>
+          </div>
 
 
-        </div>
+       
         <br>
         <div class="form-group inputbox">
           <input type="number" name="threshold" id="threshold" class="form-control input-sm" placeholder="Threshold *">
@@ -122,6 +127,15 @@ function validate()
         return false;
       }
     }
+      
+    if (mobile_checkbox == 0){
+      if(mob == ""){
+        document.getElementById('alert-mob').innerHTML =" The mobile number field can't be empty";
+      document.getElementById('alert-mob').style.color="red";
+      return false;
+      }
+    }
+	
       if(product_id == ""){
           document.getElementById('alert-pid').innerHTML =" The product_id can't be empty";
           document.getElementById('alert-pid').style.color="red";
